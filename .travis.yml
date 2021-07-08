@@ -10,9 +10,9 @@ install:
 - pip install -r requirements.txt
 
 before_script:
-- python manage.py makemigrations LegacySite
-- python manage.py migrate
-- ./import_dbs.sh
+- python GiftcardSite/manage.py makemigrations LegacySite
+- python GiftcardSite/manage.py migrate
+- ./GiftcardSite/import_dbs.sh
 
 script:
 - python src/manage.py test 
