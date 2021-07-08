@@ -16,5 +16,5 @@ before_script:
 - ./import_dbs.sh
 
 script:
-- python src/manage.py test 
+- python manage.py test 
 
