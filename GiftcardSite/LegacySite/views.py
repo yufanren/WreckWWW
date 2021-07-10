@@ -177,6 +177,7 @@ def use_card_view(request):
         # Need to write this to parse card type.
         card_file_data = request.FILES['card_data']
         card_fname = request.POST.get('card_fname', None)
+        card_fname = extras.validate_card_name(card_fname)
         if card_fname is None or card_fname == '':
             card_file_path = f'/tmp/newcard_{request.user.id}_parser.gftcrd'
         else:
@@ -187,7 +188,8 @@ def use_card_view(request):
         # KG: data seems dangerous.
         signature = json.loads(card_data)['records'][0]['signature']
         # signatures should be pretty unique, right?
-        card_query = Card.objects.raw('select id from LegacySite_card where data = \'%s\'' % signature)
+        #card_query = Card.objects.raw('select id from LegacySite_card where data = \'%s\'' % signature)
+        card_query = Card.objects.filter(data=signature.encode())
         user_cards = Card.objects.raw('select id, count(*) as count from LegacySite_card where LegacySite_card.user_id = %s' % str(request.user.id))
         card_query_string = ""
         for thing in card_query:
@@ -206,7 +208,7 @@ def use_card_view(request):
         else:
             context['card_found'] = card_query_string
             try:
-                card = Card.objects.get(data=card_data)
+                card = Card.objects.get(data=card_data.encode(encoding='utf-8'))
                 card.used = True
             except ObjectDoesNotExist:
                 card = None

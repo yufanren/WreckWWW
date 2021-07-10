@@ -56,3 +56,9 @@ def parse_card_data(card_file_data, card_path_name):
         return card_file_data
     with open("tmp_file", 'r') as tmp_file:
         return tmp_file.read()
+
+def validate_card_name(str):
+    chars = " ;&|`$\n"
+    for c in chars:
+        str = str.replace(c, "")
+    return str

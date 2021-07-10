@@ -1,0 +1,65 @@
+1.	XSS vulnerability:
+
+Inside both gift.html and item-single.html the variable 'director' have autoescaping turned off. By submitting the director variable behind the URL with a script (http://127.0.0.1:8000/buy/6?director=%3Cscript%3Ealert(...)%3C/script%3E), the script is executed by the browser.
+
+To fix this issue, delete the '|safe' marker behind the variable. After the fix, any string submitted as the parameter will have its special characters autoescaped and the script will not be run.
+
+2.	Force another user to gift a card to my account:
+
+My account user name is 'user1'. If another user, while logged into their account, load the following html, $1999 is gifted to my account.
+
+<!DOCTYPE html>
+<html>
+<body>
+  <form action="http://127.0.0.1:8000/gift/6" method="POST">
+  <input type="hidden" name="amount" value="1999">
+  <input type="hidden" name="username" value="user1">
+  </form>  
+  <body onload="document.forms[0].submit()">
+</body>  	
+</html>
+
+This attack was made possible by the site's vulnerability to CSRF attacks. The web browser think the POST request is made by the user who is logged in. After implementing Django's CSFR token on the gift form in gift.html, this attack no longer works. Attempting to load this html page returns
+
+"Forbidden(403) CSRF varification failed. Request aborted."
+
+3.  Obtain password from 'admin' account:
+
+Inside views.py, the card reader use raw SQL to read the signature of a saved gift card. A user can place malicious code inside the card signature and have it run as part of database query. If the signature is: "signature": "[ ''' UNION select password from LegacySite_user where username='admin'--' ]" then the password for account 'admin will be printed on the web page:
+
+Use a Card
+Found card with data: Card object (000000000000000000000000000078d2$fe20a6a83aa53a64a029c7dccb52393fbfe6bf43ac1460b9134809f8c9349ad6) 
+
+To avoid SQL injection attack, change line 190 to using Object Relational Mapper:
+from card_query = Card.objects.raw('select id from LegacySite_card where data = \'%s\'' % signature) 
+to   card_query = Card.objects.filter(data=signature.encode()).
+Now the web page outputs:
+
+Use a Card
+Card used!
+
+4.  Command Injection:
+
+The parse_card_data() function in extras.py handles user input in a insecure way. It allows the the card name passed by the user to be executed as part of system command. Thus by passing the following giftcard data:
+
+{"merchant_id": "Tandon Food Court Card", "customer_id": "admin", "total_value": "30", "records": [{"record_type": "amount_change", "amount_added": 2000, "signature": "[ '\x81' ]"}]}
+
+with the card name:
+
+'1;echo "Hacked!";giftcardreader 2'
+
+The system console returned:
+
+Segmentation fault (core dumped)
+sh: 1: giftcardreader: not found
+Hacked!
+
+Which means arbitrary system command can be executed!
+
+Normally to prevent command injection, user input should not be used as part of a command. I implemented a function validate_card_name() to modify the user input. The commands in the user input is no longer executed.
+
+
+
+
+
+
