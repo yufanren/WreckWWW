@@ -1,4 +1,4 @@
-1.	XSS vulnerability:
+1.	XSS attack:
 
 Inside both gift.html and item-single.html the variable 'director' have autoescaping turned off. By submitting the director variable behind the URL with a script (http://127.0.0.1:8000/buy/6?director=%3Cscript%3Ealert(...)%3C/script%3E), the script is executed by the browser.
 
@@ -58,7 +58,12 @@ Which means arbitrary system command can be executed!
 
 Normally to prevent command injection, user input should not be used as part of a command. I implemented a function validate_card_name() to modify the user input. The commands in the user input is no longer executed.
 
+5. Other
 
+Another vulnerability mentioned in the lessons were sites using http. It is possible for a middleman to sniff out the cookies sent between the server and client. Information such as session ids can be obtained this way by attacker.
+The way to fixed it is implementing something like django-sslserver to make the web app use HTTPS.
+
+The debug mode was turned on for the web app. When a exception occurs a lot of critical information be be leaked from the debug info. If this app is to be deployed, it needs to turn off debug mode.
 
 
 
