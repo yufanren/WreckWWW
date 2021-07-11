@@ -71,7 +71,7 @@ Another vulnerability mentioned in the lessons were sites using http. It is poss
 and client. Information such as session ids can be obtained this way by attacker.The way to fixed it is implementing something like django-sslserver 
 to make the web app use HTTPS.
 
-The debug mode was turned on for the web app. When a exception occurs a lot of critical information be be leaked from the debug info. If this app 
+The debug mode was turned on for the web app. When a exception occurs, a lot of critical information be be leaked from the debug info. If this app
 is to be deployed, it needs to turn off debug mode.
 
 
