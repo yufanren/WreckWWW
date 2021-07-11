@@ -1,0 +1,11 @@
+Database encryption:
+
+I used Django_cryptography to encrypt the ‘data’ field in the Card model. After encryption, card data is no longer visible to someone with access to the database.
+
+Encrypting the data field breaks functionality based on searching the encrypted column. (Such as the code involved in the sql injection attack.) For now I changed the signature matching algorithm to match on card name and user id instead. Another solution is to use something like django-searchable-encrypted-fields. This solution would have to make another seachField in addition to the encrypted field. Updating function would also be required to update both fields, generating more overhead and opportunity for error. This kind of decision is more business oriented and is outside the scope for a class assignment. 
+
+Key management:
+
+For this assignment I used python-decouple to separate sensitive information from the settings.py file inside the Django project. Information such as secret keys and database information is saved in a .env file. Python-decouple connects the setting.py file to the .env file. If this is a real project, the .env file would not be pushed to github, avoiding information being leaked. The file can be uploaded to the server via a deployment script. 
+
+Another common practice is to set these information as environment variables on the server’s operating system. They can be retrieved using something like os.environ[‘SECRET_KEY’]. Either of these choice prevent these information from being revealed to client or someone with access to the source code. 
