@@ -1,4 +1,4 @@
-Database encryption:
+Database Encryption:
 
 I used Django_cryptography to encrypt the ‘data’ field in the Card model. After encryption, card data is no longer visible to someone
 with access to the database.
@@ -9,7 +9,7 @@ like django-searchable-encrypted-fields. This solution would have to make anothe
 function would also be required to update both fields, generating more overhead and opportunity for error. This kind of decision is more
 business oriented and is outside the scope for a class assignment.
 
-Key management:
+Key Management:
 
 For this assignment I used python-decouple to separate sensitive information from the settings.py file inside the Django project. Information
 such as secret keys and database information is saved in a .env file. Python-decouple connects the setting.py file to the .env file. If this
