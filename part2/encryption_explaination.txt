@@ -11,11 +11,12 @@ business oriented and is outside the scope for a class assignment.
 
 Key Management:
 
-For this assignment I used python-decouple to separate sensitive information from the settings.py file inside the Django project. Information
-such as secret keys and database information is saved in a .env file. Python-decouple connects the setting.py file to the .env file. If this
-is a real project, the .env file would not be pushed to github, avoiding information being leaked. The file can be uploaded to the server via
-a deployment script.
+The most important thing for key handling is to separate key from data.
+For this assignment I placed the secret key and database name inside environment variables and loaded them with os.getenv('SECRET_KEY'). This
+way if someone gain access to the settings.py file they still don't know these values. These sensitive information also doesn't appear as plain text on
+github or other public repository, avoiding being leaked. For Travis CI to work these variables are set on Travis CI for the specific repository.
 
-Another common practice is to set these information as environment variables on the server’s operating system. They can be retrieved using
-something like os.environ[‘SECRET_KEY’]. Either of these choice prevent these information from being revealed to client or someone with access
-to the source code.
+If someone could hack travis ci then they would gain access to my secret key. To avoid this perhaps something like python-decouple can be used.
+For this solution, environmental variables are saved inside a .env file. The .env file can be saved on a different server and loaded via a deployment
+script. This solution is not implemented for the assignment.
+

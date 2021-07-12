@@ -8,7 +8,8 @@ media
 # Backup files # 
 *.bak 
 
-# PyCharm # 
+# PyCharm #
+.idea
 .idea/**/workspace.xml 
 .idea/**/tasks.xml 
 .idea/dictionaries 
